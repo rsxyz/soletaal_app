@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+  <h2>💰 Payments</h2>
+  <a href="{{ url_for('payment_bp.payment_form') }}" class="btn btn-primary mb-3">➕ Add Payment</a>
+  <a href="{{ url_for('payment_bp.export_payments', fmt='csv') }}" class="btn btn-outline-secondary">⬇️ Export CSV</a>
+  <a href="{{ url_for('payment_bp.export_payments', fmt='json') }}" class="btn btn-outline-secondary">⬇️ Export JSON</a>
+  <a href="{{ url_for('payment_bp.import_payments') }}" class="btn btn-outline-info">⬆️ Import</a>
+
+  <table class="table table-striped mt-3" id="paymentsTable">
+    <thead>
+      <tr>
+        <th onclick="sortTable(0)">Date ⬍</th>
+        <th onclick="sortTable(1)">Student</th>
+        <th onclick="sortTable(2)">Amount</th>
+        <th onclick="sortTable(3)">Method</th>
+        <th onclick="sortTable(4)">Class Pass</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in payments %}
+      <tr>
+        <td>{{ p.payment_date }}</td>
+        <td>{{ p.student_name }}</td>
+        <td>${{ "%.2f"|format(p.amount) }}</td>
+        <td>{{ p.payment_method }}</td>
+        <td>{{ p.class_pass }}</td>
+        <td>
+          <a href="{{ url_for('payment_bp.payment_form', payment_id=p.id) }}" class="btn btn-sm btn-warning">Edit</a>
+          <a href="{{ url_for('payment_bp.delete_payment', payment_id=p.id) }}" class="btn btn-sm btn-danger"
+             onclick="return confirm('Delete this payment?')">Delete</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<script>
+function sortTable(n) {
+  const table = document.getElementById("paymentsTable");
+  let rows = Array.from(table.rows).slice(1);
+  const asc = table.dataset.sortOrder !== "asc";
+  rows.sort((a, b) => a.cells[n].innerText.localeCompare(b.cells[n].innerText, undefined, {numeric: true}));
+  if (!asc) rows.reverse();
+  table.dataset.sortOrder = asc ? "asc" : "desc";
+  rows.forEach(r => table.tBodies[0].appendChild(r));
+}
+</script>
+{% endblock %}

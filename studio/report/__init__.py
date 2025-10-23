@@ -1,14 +1,14 @@
-# studio/payment/__init__.py
+# studio/report/__init__.py
 
 from flask import Blueprint
 
 # Define the blueprint
-payment_bp = Blueprint(
-    'payment_bp',
+report_bp = Blueprint(
+    'report_bp',
     __name__,
     template_folder='templates',
     static_folder='static'
 )
 
 # Import routes after blueprint creation
-from studio.payment.routes import payment_routes
+from studio.report.routes import report_routes
