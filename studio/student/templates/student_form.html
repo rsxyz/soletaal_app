@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+  <h2>{{ "Edit" if student else "Add" }} Student</h2>
+
+  <form method="POST">
+    <div class="mb-3">
+      <label>First Name</label>
+      <input type="text" class="form-control" name="first_name" value="{{ student[1] if student else '' }}" required>
+    </div>
+
+    <div class="mb-3">
+      <label>Last Name</label>
+      <input type="text" class="form-control" name="last_name" value="{{ student[2] if student else '' }}" required>
+    </div>
+
+    <div class="mb-3">
+      <label>Phone</label>
+      <input type="text" class="form-control" name="phone" value="{{ student[3] if student else '' }}">
+    </div>
+
+    <div class="mb-3">
+      <label>Email</label>
+      <input type="email" class="form-control" name="email_id" value="{{ student[4] if student else '' }}">
+    </div>
+
+    <button type="submit" class="btn btn-success">💾 Save</button>
+    <a href="{{ url_for('student_bp.student_list') }}" class="btn btn-secondary">↩️ Cancel</a>
+  </form>
+</div>
+{% endblock %}

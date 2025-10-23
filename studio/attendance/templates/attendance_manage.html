@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+  <h3>Manage Attendance</h3>
+  <form method="post" action="{{ url_for('attendance_bp.manage_attendance') }}">
+    <input type="hidden" name="attendance_date" value="{{ selected_date }}">
+    <input type="hidden" name="class_id" value="{{ selected_class }}">
+
+    <p><strong>Date:</strong> {{ selected_date }}</p>
+    <p><strong>Class:</strong>
+      {% for c in classes %}
+        {% if c[0] == selected_class|int %}{{ c[1] }}{% endif %}
+      {% endfor %}
+    </p>
+
+    <hr>
+    <h5>Mark Attendance</h5>
+    <table class="table table-bordered">
+      <thead>
+        <tr><th>Student</th><th>Present</th></tr>
+      </thead>
+      <tbody>
+        {% for s in students %}
+        <tr>
+          <td>{{ s['name'] }}</td>
+          <td>
+            <input type="checkbox" name="students" value="{{ s['id'] }}"
+                   {% if s['id']|string in attended %}checked{% endif %}>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <button type="submit" class="btn btn-success mt-3">Save Attendance</button>
+    <a href="{{ url_for('attendance_bp.attendance_dashboard') }}" class="btn btn-secondary mt-3">Cancel</a>
+  </form>
+</div>
+{% endblock %}

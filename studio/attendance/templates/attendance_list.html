@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+  <h2>Attendance Dashboard</h2>
+
+  <form method="get" action="{{ url_for('attendance_bp.manage_attendance') }}" class="row g-3 mt-3">
+    <div class="col-md-4">
+      <label>Class:</label>
+      <select name="class_id" class="form-select" required>
+        <option value="">-- Select Class --</option>
+        {% for c in classes %}
+          <option value="{{ c[0] }}">{{ c[1] }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-4">
+      <label>Date:</label>
+      <input type="date" name="attendance_date" class="form-control" required>
+    </div>
+    <div class="col-md-2 align-self-end">
+      <button type="submit" class="btn btn-primary w-100">Manage</button>
+    </div>
+  </form>
+
+  <hr>
+  <h5 class="mt-4">Existing Records</h5>
+  <table id="attendanceTable" class="table table-bordered table-striped">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Class</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for d in dates %}
+      {% for c in classes %}
+      <tr>
+        <td>{{ d }}</td>
+        <td>{{ c[1] }}</td>
+        <td>
+          <a href="{{ url_for('attendance_bp.manage_attendance', class_id=c[0], attendance_date=d) }}" class="btn btn-sm btn-info">Edit</a>
+          <form method="post" action="{{ url_for('attendance_bp.delete_attendance') }}" style="display:inline;">
+            <input type="hidden" name="class_id" value="{{ c[0] }}">
+            <input type="hidden" name="attendance_date" value="{{ d }}">
+            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" ></script>
+<script>
+const dataTable = new simpleDatatables.DataTable("#attendanceTable");
+</script>
+{% endblock %}
