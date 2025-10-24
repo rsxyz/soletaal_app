@@ -4,6 +4,7 @@ from studio.student import student_bp
 from studio.attendance import attendance_bp
 from studio.payment import payment_bp
 from studio.report import report_bp
+from studio.expense import expense_bp
 
 import os
 
@@ -18,6 +19,7 @@ app.register_blueprint(student_bp, url_prefix="/student")
 app.register_blueprint(attendance_bp, url_prefix="/attendance")
 app.register_blueprint(payment_bp, url_prefix="/payment")
 app.register_blueprint(report_bp, url_prefix="/report")
+app.register_blueprint(expense_bp, url_prefix="/expense")
 
 @app.route("/")
 def index():

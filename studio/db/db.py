@@ -108,5 +108,30 @@ def init_db():
     )
     """)
 
+    # Expenses
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS expense_types (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT UNIQUE NOT NULL
+    )
+    """)
+
+    cur.executemany("INSERT OR IGNORE INTO expense_types (name) VALUES (?)", [
+        ('Security Deposit',),
+        ('Rent',),
+        ('Misc',)
+    ])
+
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS expenses (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        expense_date TEXT NOT NULL,
+        expense_type_id INTEGER NOT NULL,
+        amount REAL NOT NULL,
+        notes TEXT,
+        FOREIGN KEY (expense_type_id) REFERENCES expense_types(id)
+    )
+    """)
+
     conn.commit()
     conn.close()

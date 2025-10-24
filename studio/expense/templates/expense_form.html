@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Edit Expense</h2>
+
+<form action="{{ url_for('expense_bp.edit_expense', id=expense[0]) }}" method="POST">
+  <div class="row mb-3">
+    <div class="col">
+      <label>Date</label>
+      <input type="date" name="expense_date" class="form-control" value="{{ expense[1] }}" required>
+    </div>
+    <div class="col">
+      <label>Type</label>
+      <select name="expense_type_id" class="form-control" required>
+        {% for t in types %}
+        <option value="{{ t[0] }}" {% if t[0] == expense[2] %}selected{% endif %}>{{ t[1] }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col">
+      <label>Amount</label>
+      <input type="number" step="0.01" name="amount" class="form-control" value="{{ expense[3] }}" required>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label>Notes</label>
+    <input type="text" name="notes" class="form-control" value="{{ expense[4] }}">
+  </div>
+
+  <button type="submit" class="btn btn-primary">Save Changes</button>
+  <a href="{{ url_for('expense_bp.expenses_list') }}" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock %}

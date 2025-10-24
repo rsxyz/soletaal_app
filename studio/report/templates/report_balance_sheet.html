@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>📊 Balance Sheet Report</h2>
+
+<table class="table table-bordered table-striped">
+  <thead class="table-dark">
+    <tr>
+      <th>Year</th>
+      <th>Month</th>
+      <th class="text-end">Income ($)</th>
+      <th class="text-end">Expense ($)</th>
+      <th class="text-end">Net Profit ($)</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% set total_income = 0 %}
+    {% set total_expense = 0 %}
+    {% set total_net = 0 %}
+
+    {% for r in rows %}
+    {% set total_income = total_income + (r.income or 0) %}
+    {% set total_expense = total_expense + (r.expense or 0) %}
+    {% set total_net = total_net + (r.net or 0) %}
+    <tr>
+      <td>{{ r.year }}</td>
+      <td>{{ r.month }}</td>
+      <td class="text-end">{{ "%.2f"|format(r.income or 0) }}</td>
+      <td class="text-end">{{ "%.2f"|format(r.expense or 0) }}</td>
+      <td class="text-end {% if r.net < 0 %}text-danger{% else %}text-success{% endif %}">
+        {{ "%.2f"|format(r.net or 0) }}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+  <tfoot class="table-secondary fw-bold">
+    <tr>
+      <td colspan="2" class="text-end">TOTAL</td>
+      <td class="text-end">{{ "%.2f"|format(total_income) }}</td>
+      <td class="text-end">{{ "%.2f"|format(total_expense) }}</td>
+      <td class="text-end">{{ "%.2f"|format(total_net) }}</td>
+    </tr>
+  </tfoot>
+</table>
+{% endblock %}
