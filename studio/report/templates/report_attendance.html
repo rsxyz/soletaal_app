@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+  <h2>📅 Monthly Attendance Report</h2>
+
+  <form method="get" action="{{ url_for('report_bp.attendance_report') }}" class="row g-2 mb-4">
+    <div class="col-auto">
+      <label for="year" class="form-label">Year:</label>
+      <select id="year" name="year" class="form-select">
+        {% for y in years %}
+        <option value="{{ y }}" {% if y == selected_year %}selected{% endif %}>{{ y }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="col-auto">
+      <label for="month" class="form-label">Month:</label>
+      <select id="month" name="month" class="form-select">
+        {% for m in months %}
+        <option value="{{ m }}" {% if m == selected_month %}selected{% endif %}>{{ m }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="col-auto align-self-end">
+      <button type="submit" class="btn btn-primary">View Report</button>
+    </div>
+  </form>
+
+  {% if date_class_pairs %}
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover align-middle small">
+      <thead class="table-dark text-center">
+        <tr>
+          <th>Student</th>
+          {% for d in date_class_pairs %}
+          <th>{{ d["attendance_date"][8:10] }}<br>{{ d["class_name"] }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in students %}
+        <tr>
+          <td>{{ s["name"] }}</td>
+          {% for d in date_class_pairs %}
+          <td class="text-center">
+            {% if s["id"] in attendance_map and (d["attendance_date"], d["class_name"]) in attendance_map[s["id"]] %}
+              ✅
+            {% else %}
+              -
+            {% endif %}
+          </td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="alert alert-info">
+    No attendance records found for {{ selected_year }}-{{ selected_month }}.
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

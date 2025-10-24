@@ -11,4 +11,4 @@ report_bp = Blueprint(
 )
 
 # Import routes after blueprint creation
-from studio.report.routes import report_routes
+from studio.report.routes import report_routes, report_attendance_routes
